@@ -3,5 +3,10 @@
 int main(void)
 {
     /* code */
+    for (; ; )
+    {
+        /* code */
+    }
+    
     return 0;
 }
