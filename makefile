@@ -2,6 +2,7 @@ CC = arm-none-eabi
 CORE = -mcpu=cortex-m0 -mthumb -mfloat-abi=soft
 TARGET = temp
 SYMBOLS = -DSTM32F091xC -DUSE_HAL_DRIVER
+SYMBOLS += -DSEMIHOSTING
 
 VPATH = App/Source cmsis/startup HALF0/Src 
 INCLUDES = -I App/Include -I cmsis/core -I cmsis/registers -I HALF0/Inc
@@ -54,9 +55,9 @@ clean:
 	@rm -rf Build
 clean_full:
 	@echo "clean"
-flash:
-	@echo flash
+flash:all
+	@openocd -f interface/stlink.cfg -f target/stm32f0x.cfg -c "program Build/$(TARGET).hex verify reset" -c shutdown
 open:
-	@echo open
+	@openocd -f interface/stlink.cfg -f target/stm32f0x.cfg -c "reset_config srst_only srst_nogate"
 debug:
-	@echo debug
+	@$(CC)-gdb Build/$(TARGET).elf -iex "set auto-load safe-path /"
